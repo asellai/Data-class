@@ -1,5 +1,5 @@
 ## Data-class
-#What is this?
+# What is this?
 
 - This is a simple Java program that works with dates. It can:
 
@@ -15,7 +15,7 @@
 
 - Sort dates in order (oldest to newest).
 
-#Extra Stuff
+# Extra Stuff
 
 It knows leap years
 
@@ -25,7 +25,7 @@ Dates are sorted by year first, then month, then day.
 
 If you try to enter a wrong date, it will show an error.
 
-#Additional Notes or Challenges
+# Additional Notes or Challenges
 
 Leap years are tricky. The program correctly handles them, but it can be confusing.
 
