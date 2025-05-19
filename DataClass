@@ -1,0 +1,89 @@
+import java.util.*;
+
+public class DateClass implements Comparable<DateClass> {
+    private int day;
+    private int month;
+    private int year;
+
+    public DateClass(int day, int month, int year) {
+        if (!isValid(day, month, year)) {
+            System.out.println("Invalid date, using default 01/01/2000");
+            this.day = 1;
+            this.month = 1;
+            this.year = 2000;
+        } else {
+            this.day = day;
+            this.month = month;
+            this.year = year;
+        }
+    }
+
+    public static boolean isLeap(int year) {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+    }
+
+    public static boolean isValid(int d, int m, int y) {
+        if (m < 1 || m > 12 || d < 1) return false;
+        int[] dm = {31,28,31,30,31,30,31,31,30,31,30,31};
+        if (m == 2 && isLeap(y)) return d <= 29;
+        return d <= dm[m - 1];
+    }
+
+    public String getDayName() {
+        int m = (month < 3) ? month + 12 : month;
+        int y = (month < 3) ? year - 1 : year;
+        int q = day;
+        int k = y % 100;
+        int j = y / 100;
+        int h = (q + (13 * (m + 1)) / 5 + k + (k / 4) + (j / 4) + 5 * j) % 7;
+        String[] names = {"Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+        return names[h];
+    }
+
+    public String toLongFormat() {
+        String[] months = {"January", "February", "March", "April", "May", "June",
+                           "July", "August", "September", "October", "November", "December"};
+        return months[month - 1] + " " + day + ", " + year;
+    }
+
+    public int daysSinceEpoch() {
+        Calendar c = new GregorianCalendar(year, month - 1, day);
+        Calendar base = new GregorianCalendar(1970, 0, 1);
+        long ms = c.getTimeInMillis() - base.getTimeInMillis();
+        return (int)(ms / (1000 * 60 * 60 * 24));
+    }
+
+    public static int daysBetween(DateClass a, DateClass b) {
+        return Math.abs(a.daysSinceEpoch() - b.daysSinceEpoch());
+    }
+
+    public void setDate(int d, int m, int y) {
+        if (isValid(d, m, y)) {
+            this.day = d;
+            this.month = m;
+            this.year = y;
+        } else {
+            System.out.println("Invalid new date");
+        }
+    }
+
+    @Override
+    public int compareTo(DateClass o) {
+        if (this.year != o.year) return this.year - o.year;
+        if (this.month != o.month) return this.month - o.month;
+        return this.day - o.day;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%02d/%02d/%04d", day, month, year);
+    }
+
+    public static void main(String[] args) {
+        DateClass d1 = new DateClass(15, 5, 2021);
+        DateClass d2 = new DateClass(1, 1, 2024);
+        System.out.println(d1.toLongFormat() + " - " + d1.getDayName());
+        System.out.println(d2.toLongFormat() + " - " + d2.getDayName());
+        System.out.println("Days between: " + daysBetween(d1, d2));
+    }
+}
